@@ -25,11 +25,12 @@ class App(ctk.CTk):
         self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Randomizer App", font=ctk.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        #Button for choosing catagory
+        #Button for choosing catagory with options
         self.catagories_optionmenu_label = ctk.CTkLabel(self.sidebar_frame, text="Catagories", anchor="w")
         self.catagories_optionmenu_label.grid(row=2,column=0,padx=20,pady=(10,0))
         
-        self.catagories_optionmenu = ctk.CTkOptionMenu(self.sidebar_frame, values = catagories_list)
+        self.catagories_optionmenu = ctk.CTkOptionMenu(self.sidebar_frame, values = catagories_list,
+                                                       command = self.change_options_event)
         self.catagories_optionmenu.grid(row=3,column=0,padx=20,pady=(10,10))
         
         
@@ -40,9 +41,28 @@ class App(ctk.CTk):
                                                                        command=self.change_appearance_mode_event)
         self.appearance_mode_optionemenu.grid(row=6, column=0, padx=20, pady=(10, 10))
         
-    
+        
+        #Scrollable frame with options in choosen catagory
+        self.scrollable_frame = ctk.CTkScrollableFrame(self, label_text="Options")
+        self.scrollable_frame.grid(row=0,column=1,padx=(20, 0),pady=(20,0), sticky="wns")
+        self.scrollable_frame.grid_columnconfigure(0, weight=1)
+        
+    #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
+    
+    #Updates scrollbar_frame with options in catagory
+    def change_options_event(self, new_catagory: str):
+        self.scrollable_frame.clipboard_clear()
+        options = FileInteractor.options_list(new_catagory)
+        index = 0
+        for i in options:
+           checkbox = ctk.CTkCheckBox(master=self.scrollable_frame, text = i)
+           checkbox.grid(row=index, column = 0, padx = 10, pady=(0,20), sticky="w")
+           index += 1
+            
+            
+            
         
         
 if __name__ == "__main__":
