@@ -7,11 +7,12 @@ class FileInteractor():
 
         
         
-    #Returns all of the existing catagories file names
+    #Returns all of the existing catagories file names as a List
     @staticmethod
     def current_catagories():
         with open(directory+"Catagories.txt", "r") as editor:
-            catagories = editor.readlines()
+            #Reads every line, and removes \n
+            catagories = editor.read().splitlines()
         editor.close()    
         return catagories
         
