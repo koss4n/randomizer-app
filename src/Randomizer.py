@@ -53,7 +53,10 @@ class App(ctk.CTk):
     
     #Updates scrollbar_frame with options in catagory
     def change_options_event(self, new_catagory: str):
-        self.scrollable_frame.clipboard_clear()
+        
+        for widgets in self.scrollable_frame.winfo_children():
+            widgets.destroy()
+            
         options = FileInteractor.options_list(new_catagory)
         index = 0
         for i in options:
