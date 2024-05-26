@@ -6,15 +6,16 @@ ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 catagories_list = FileInteractor.current_catagories()
-
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
+        self.options = [""]
+        self.options_delete = []
         self.title("CustomTkinter complex_example.py")
         self.geometry(f"{1100}x{580}")
         # configure grid layout (4x4)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure((2, 3), weight=0)
+        self.grid_columnconfigure(2, weight=1)
+        self.grid_columnconfigure(3, weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
         
         self.sidebar_frame = ctk.CTkFrame(self, width=140, corner_radius=0)
@@ -47,6 +48,16 @@ class App(ctk.CTk):
         self.scrollable_frame.grid(row=0,column=1,padx=(20, 0),pady=(20,0), sticky="wns")
         self.scrollable_frame.grid_columnconfigure(0, weight=1)
         
+        #Button for deleting checked items in scrollbar_frame
+        self.side_scroll_frame = ctk.CTkFrame(self, width=300)
+        self.side_scroll_frame.grid(row=0, column=2, rowspan=4, sticky="wns", padx=(20,0),pady=(20,280))
+       
+        
+        self.delete_button = ctk.CTkButton(self.side_scroll_frame, text = "Delete Item", state='disabled',
+                                                  command = self.delete_items_in_catagory_event)
+        self.delete_button.grid(row=0,column=0,padx=30,pady=(10, 0))
+        
+        
     #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
@@ -57,13 +68,37 @@ class App(ctk.CTk):
         for widgets in self.scrollable_frame.winfo_children():
             widgets.destroy()
             
-        options = FileInteractor.options_list(new_catagory)
+        self.options = FileInteractor.options_list(new_catagory)
         index = 0
-        for i in options:
-           checkbox = ctk.CTkCheckBox(master=self.scrollable_frame, text = i)
+        
+      
+            
+        for i in self.options:
+            
+           check_var = ctk.StringVar(value="off")  
+           def on_checkbox_click(option=i, var=check_var):
+                if var.get() == option:
+                    if option not in self.options_delete:
+                        self.options_delete.append(option)
+                else:
+                    if option in self.options_delete:
+                        self.options_delete.remove(option)
+                
+                print(self.options_delete)  # For debugging purposes, you can remove or modify this line
+         
+           checkbox = ctk.CTkCheckBox(master=self.scrollable_frame, text = i, variable=check_var, onvalue= i, offvalue= "off",
+                                      command= on_checkbox_click)
            checkbox.grid(row=index, column = 0, padx = 10, pady=(0,20), sticky="w")
            index += 1
-            
+        
+        
+        
+    
+        
+        
+    
+    def delete_items_in_catagory_event(self):
+        print(self.options_delete)
             
             
         

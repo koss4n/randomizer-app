@@ -38,7 +38,7 @@ class FileInteractor():
         #Adds the @option to the @catagory txt file
             
     @staticmethod
-    def delete_option(catagory, option):
+    def delete_option(catagory:str, option:list):
        with open(directory+catagory+".txt", "r") as f:
         lines = f.readlines()
         #Creates list of options in @catagory
