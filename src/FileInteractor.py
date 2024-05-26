@@ -52,9 +52,9 @@ class FileInteractor():
     
     def options_list(userCatagory):
         #fix new line issue
-        userCatagory = userCatagory.replace("\n", "")
-        with open(userCatagory+".txt", "r") as editor:
-            listOfOptions: list[str] = editor.readlines()
+        #userCatagory = userCatagory.replace("\n", "")
+        with open(directory + userCatagory+".txt", "r") as editor:
+            listOfOptions: list[str] = editor.read().splitlines()
         return listOfOptions
         
        
