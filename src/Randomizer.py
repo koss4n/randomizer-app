@@ -10,7 +10,10 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.options = [""]
+        #vars for keeping track on checkbox items to manipulate
         self.options_delete = []
+        self.options_delete_items_count = 0
+        
         self.title("CustomTkinter complex_example.py")
         self.geometry(f"{1100}x{580}")
         # configure grid layout (4x4)
@@ -76,15 +79,27 @@ class App(ctk.CTk):
         for i in self.options:
             
            check_var = ctk.StringVar(value="off")  
+           
            def on_checkbox_click(option=i, var=check_var):
+               
+               #Manipulates options_delete which goes to delete_button
                 if var.get() == option:
                     if option not in self.options_delete:
                         self.options_delete.append(option)
+                        self.options_delete_items_count += 1
                 else:
                     if option in self.options_delete:
                         self.options_delete.remove(option)
+                        self.options_delete_items_count -= 1
                 
                 print(self.options_delete)  # For debugging purposes, you can remove or modify this line
+                
+                #Manipulates state of delete_button depending on if items are checked or not
+                if self.options_delete_items_count != 0:
+                    self.delete_button.configure(state='normal')
+                else:
+                    self.delete_button.configure(state='disabled')
+                    
          
            checkbox = ctk.CTkCheckBox(master=self.scrollable_frame, text = i, variable=check_var, onvalue= i, offvalue= "off",
                                       command= on_checkbox_click)
