@@ -1,5 +1,6 @@
 #Main application file
 import customtkinter as ctk
+from CTkMessagebox import CTkMessagebox
 from FileInteractor import *
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -9,7 +10,7 @@ catagories_list = FileInteractor.current_catagories()
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.options = [""]
+        self.options = []
         #vars for keeping track on checkbox items to manipulate
         self.options_delete = []
         self.options_delete_items_count = 0
@@ -55,11 +56,15 @@ class App(ctk.CTk):
         self.side_scroll_frame = ctk.CTkFrame(self, width=300)
         self.side_scroll_frame.grid(row=0, column=2, rowspan=4, sticky="wns", padx=(20,0),pady=(20,280))
        
-        
+        #Delete item button
         self.delete_button = ctk.CTkButton(self.side_scroll_frame, text = "Delete Item", state='disabled',
                                                   command = self.delete_items_in_catagory_event)
-        self.delete_button.grid(row=0,column=0,padx=30,pady=(10, 0))
+        self.delete_button.grid(row=1,column=0,padx=30,pady=(10, 0))
         
+        #Add item button
+        self.add_button = ctk.CTkButton(self.side_scroll_frame, text = "Add Item", state='normal',
+                                                  command=self.open_input_dialog_event)
+        self.add_button.grid(row=0,column=0,padx=30,pady=(10, 0))
         
     #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
@@ -125,10 +130,24 @@ class App(ctk.CTk):
         FileInteractor.delete_options(current_catagory, self.options)
         self.change_options_event(current_catagory)
         
+    #Add item to catagory
+    def open_input_dialog_event(self):
+        dialog = ctk.CTkInputDialog(text="Add Option to Catagory", title="Add Item")
+        current_catagory = self.catagories_optionmenu.get()
+        item = dialog.get_input()
+        
+        #Raise error message
+        if item in self.options:
+            CTkMessagebox(master = self, title="Error", message="Item already exists in catagory", icon='cancel', option_1="OK", justify="center").tkraise()
             
-            
+        #Add item to catagory
+        else:
+            FileInteractor.add_option_to_catagory(current_catagory,item)
+            self.change_options_event(current_catagory)
+        
         
         
 if __name__ == "__main__":
     app = App()
+    app.change_options_event(catagories_list[0])
     app.mainloop()  

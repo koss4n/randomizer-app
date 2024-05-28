@@ -32,7 +32,7 @@ class FileInteractor():
             
     #Adds option to catagory    
     @staticmethod
-    def add_to_option_to_catagory(catagory, option):
+    def add_option_to_catagory(catagory, option):
         with open(directory+catagory+".txt", "a+") as editor:
             editor.write("\n" + option)
         #Adds the @option to the @catagory txt file
