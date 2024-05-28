@@ -37,16 +37,14 @@ class FileInteractor():
             editor.write("\n" + option)
         #Adds the @option to the @catagory txt file
             
-    @staticmethod
-    def delete_option(catagory:str, option:list):
-       with open(directory+catagory+".txt", "r") as f:
-        lines = f.readlines()
-        #Creates list of options in @catagory
-        with open(directory+catagory+".txt", "w") as f:
-            for line in lines:
-                if line.strip("\n") != option:
-                    f.write(line) 
-        #Rewrites every line in file except for the line that matches @option which will be deleted. 
+    #Deletes items in a catagory from a given list
+    def delete_options(catagory:str, options:list):
+       with open(directory+catagory+".txt", "w") as editor:
+        editor.write(options[0])
+        options.remove(options[0])
+        for i in options:
+            editor.write("\n" + i)
+        editor.close() 
         
    
     

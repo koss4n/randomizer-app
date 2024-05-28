@@ -92,8 +92,6 @@ class App(ctk.CTk):
                         self.options_delete.remove(option)
                         self.options_delete_items_count -= 1
                 
-                print(self.options_delete)  # For debugging purposes, you can remove or modify this line
-                
                 #Manipulates state of delete_button depending on if items are checked or not
                 if self.options_delete_items_count != 0:
                     self.delete_button.configure(state='normal')
@@ -111,9 +109,22 @@ class App(ctk.CTk):
     
         
         
-    
+    #Removes checked items
     def delete_items_in_catagory_event(self):
-        print(self.options_delete)
+        
+        #Removes items in options_delete from options 
+        for i in self.options_delete:
+            self.options.remove(i)
+            
+        #Resets options_delete & count
+        self.options_delete = []
+        self.options_delete_items_count = 0
+        
+        #Rewrites catagory txt file without deleted options and resets frame
+        current_catagory = self.catagories_optionmenu.get()
+        FileInteractor.delete_options(current_catagory, self.options)
+        self.change_options_event(current_catagory)
+        
             
             
         
