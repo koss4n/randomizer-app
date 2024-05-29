@@ -16,6 +16,7 @@ class App(ctk.CTk):
         #vars for keeping track on checkbox items to manipulate
         self.options_delete = []
         self.options_delete_items_count = 0
+        self.widgets_list = []
         
         self.title("Randomizer App.py")
         self.geometry(f"{600}x{420}")
@@ -72,9 +73,21 @@ class App(ctk.CTk):
                                                   command=self.choose_random)
         self.roll_button.grid(row=1,column=0,padx=10,pady=(20, 0))
         
+        self.widgets_list.append(self.add_button)
+        self.widgets_list.append(self.roll_button)
+        self.widgets_list.append(self.delete_button)
+        self.widgets_list.append(self.appearance_mode_optionemenu)
+        self.widgets_list.append(self.catagories_optionmenu)
+        
     #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
+        if new_appearance_mode == "Dark":
+            for widget in self.widgets_list:
+                widget.configure(fg_color="#5F9EA0", text_color="AliceBlue")
+        else:
+            for widget in self.widgets_list:
+             widget.configure(fg_color="#D8BFD8", text_color="white") 
     
     #Updates scrollbar_frame with options in catagory
     def change_options_event(self, new_catagory: str):
@@ -166,8 +179,6 @@ class App(ctk.CTk):
         
         message_popup(random_option)
             
-        
-        
     
             
         
