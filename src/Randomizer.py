@@ -2,6 +2,7 @@
 import customtkinter as ctk
 from CTkMessagebox import CTkMessagebox
 from FileInteractor import *
+import random
 
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -10,6 +11,7 @@ catagories_list = FileInteractor.current_catagories()
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
+        #All available options in current catagory
         self.options = []
         #vars for keeping track on checkbox items to manipulate
         self.options_delete = []
@@ -66,6 +68,11 @@ class App(ctk.CTk):
                                                   command=self.open_input_dialog_event)
         self.add_button.grid(row=0,column=0,padx=30,pady=(10, 0))
         
+        #Roll random item button
+        self.roll_button = ctk.CTkButton(self.side_scroll_frame, text = "Roll", state='normal',
+                                                  command=self.choose_random)
+        self.roll_button.grid(row=4,column=0,padx=30,pady=(10, 0))
+        
     #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
@@ -78,9 +85,7 @@ class App(ctk.CTk):
             
         self.options = FileInteractor.options_list(new_catagory)
         index = 0
-        
-      
-            
+           
         for i in self.options:
             
            check_var = ctk.StringVar(value="off")  
@@ -145,7 +150,27 @@ class App(ctk.CTk):
             FileInteractor.add_option_to_catagory(current_catagory,item)
             self.change_options_event(current_catagory)
         
+    def choose_random(self):
+        #Choose random item from list
+        random_option = random.choice(self.options)
+        #Func to present option & get response
+        def message_popup(choosen_item):
+            msg = CTkMessagebox(master = self, title="Option Rolled", message=choosen_item, icon='check', option_1="OK",option_2="Re-roll", justify="center")
+            msg.tkraise()
+            response = msg.get()
+            if response == "Re-roll":
+                temp = self.options
+                temp.remove(choosen_item)
+                random_temp = random.choice(temp)
+                temp.append(choosen_item)
+                message_popup(random_temp)
         
+        message_popup(random_option)
+            
+        
+        
+    
+            
         
 if __name__ == "__main__":
     app = App()
