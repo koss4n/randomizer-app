@@ -8,7 +8,6 @@ class FileInteractor():
         
         
     #Returns all of the existing catagories file names as a List
-    @staticmethod
     def current_catagories():
         with open(directory+"Catagories.txt", "r") as editor:
             #Reads every line, and removes \n
@@ -19,22 +18,26 @@ class FileInteractor():
             
             
     #Creates a new catagory      
-    @staticmethod
     def add_catagory(catagory):
-        
-        with open("Catagories.txt", "a") as editor:
+        #Adds a new catagory name to the Catagories.txt file
+        with open(directory + "Catagories.txt", "a") as editor:
             editor.write("\n" + catagory)
-        #Adds a new catagory name to the Catagories.txt file 
-        with open(directory+catagory+".txt", "a") as editor:
-            editor.write("")
+            editor.close()
         #Creates a new txt file with param @catagory name 
-        editor.close()
+        with open(directory+catagory+".txt", "a") as editor:
+            editor.close()
+         
+      
             
     #Adds option to catagory    
     @staticmethod
     def add_option_to_catagory(catagory, option):
         with open(directory+catagory+".txt", "a+") as editor:
-            editor.write("\n" + option)
+            firstline = editor.readline()
+            if firstline == "":
+                editor.write(option)
+            else:
+                editor.write("\n" + option)
         #Adds the @option to the @catagory txt file
             
     #Deletes items in a catagory from a given list
