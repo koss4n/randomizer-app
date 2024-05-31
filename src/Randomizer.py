@@ -39,11 +39,17 @@ class App(ctk.CTk):
         self.catagories_optionmenu = ctk.CTkOptionMenu(self.sidebar_frame, values = catagories_list,
                                                        command = self.change_options_event)
         self.catagories_optionmenu.grid(row=3,column=0,padx=20,pady=(10,10))
+        self.catagories_optionmenu.set("")
         
         #Button for adding new catagory
         self.catagories_add_button = ctk.CTkButton(self.sidebar_frame, text = "Add New Catagory",
                                                    command=self.add_catagory_event)
         self.catagories_add_button.grid(row=4,column=0,padx=20,pady=(0,100))
+        
+         #Button for deleting catagory
+        self.catagories_del_button = ctk.CTkButton(self.sidebar_frame, text = "Delete Catagory",
+                                                   command=self.delete_catagory_event)
+        self.catagories_del_button.grid(row=4,column=0,padx=20,pady=(0,20))
         
         
         #Button for changing app appearance
@@ -86,6 +92,7 @@ class App(ctk.CTk):
         self.widgets_list.append(self.appearance_mode_optionemenu)
         self.widgets_list.append(self.catagories_optionmenu)
         self.widgets_list.append(self.catagories_add_button)
+        self.widgets_list.append(self.catagories_del_button)
         
     #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
@@ -197,6 +204,23 @@ class App(ctk.CTk):
                 self.catagories_optionmenu.configure(values=catagories_list)
             except TypeError:
                 pass
+    def delete_catagory_event(self):
+        del_catagory = self.catagories_optionmenu.get()
+        
+        confirmation_box = CTkMessagebox(master = self, title="Delete catagory", message="Are you sure you want to delete "+del_catagory + "?", icon='question', option_1="YES", option_2="NO",
+                                         justify="center", option_focus=2)
+        confirmation_box.tkraise()
+        user_answer = confirmation_box.get() 
+        
+        if user_answer == "YES":
+            FileInteractor.delete_catagory(del_catagory)
+            catagories_list.remove(del_catagory)
+            self.catagories_optionmenu.configure(values=catagories_list)
+            self.catagories_optionmenu.set("")
+            for widgets in self.scrollable_frame.winfo_children():
+                widgets.destroy()
+        
+        
             
     def choose_random(self):
         #Choose random item from list
@@ -226,5 +250,4 @@ class App(ctk.CTk):
         
 if __name__ == "__main__":
     app = App()
-    app.change_options_event(catagories_list[0])
     app.mainloop()  

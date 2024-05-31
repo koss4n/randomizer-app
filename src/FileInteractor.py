@@ -1,4 +1,5 @@
 import random
+import os
 
 directory = "data/"
 
@@ -21,7 +22,7 @@ class FileInteractor():
     def add_catagory(catagory):
         #Adds a new catagory name to the Catagories.txt file
         with open(directory + "Catagories.txt", "a") as editor:
-            editor.write("\n" + catagory)
+            editor.write( catagory+"\n")
             editor.close()
         #Creates a new txt file with param @catagory name 
         with open(directory+catagory+".txt", "a") as editor:
@@ -68,3 +69,18 @@ class FileInteractor():
         
         
                 
+     #Delete catagory file & entry
+    def delete_catagory(catagory):
+        file = directory+catagory+".txt"
+        if os.path.exists(file):
+            os.remove(file)
+            catagories = FileInteractor.current_catagories()
+            catagories.remove(catagory)
+            with open(directory + "Catagories"+".txt", "w+") as editor:
+                for i in range(len(catagories)):
+                    editor.write(catagories[i]+"\n")
+                editor.close()
+                
+                
+        else:
+            print("Error file doesn't exist")
