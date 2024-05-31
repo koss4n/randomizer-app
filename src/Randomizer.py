@@ -75,7 +75,7 @@ class App(ctk.CTk):
         self.delete_button.grid(row=3,column=0,padx=10,pady=(10, 0))
         
         #Add item button
-        self.add_button = ctk.CTkButton(self.side_scroll_frame, width=100, text = "Add Item", state='normal',
+        self.add_button = ctk.CTkButton(self.side_scroll_frame, width=100, text = "Add Item", state='disabled',
                                                   command=self.add_option_event)
         self.add_button.grid(row=2,column=0,padx=10,pady=(40, 0))
         
@@ -107,6 +107,7 @@ class App(ctk.CTk):
     #Updates scrollbar_frame with options in catagory
     def change_options_event(self, new_catagory: str):
         
+        self.add_button.configure(state='normal')
         for widgets in self.scrollable_frame.winfo_children():
             widgets.destroy()
             
@@ -213,6 +214,7 @@ class App(ctk.CTk):
         user_answer = confirmation_box.get() 
         
         if user_answer == "YES":
+            self.add_button.configure(state='disabled')
             FileInteractor.delete_catagory(del_catagory)
             catagories_list.remove(del_catagory)
             self.catagories_optionmenu.configure(values=catagories_list)
@@ -220,6 +222,8 @@ class App(ctk.CTk):
             for widgets in self.scrollable_frame.winfo_children():
                 widgets.destroy()
         
+        
+            
         
             
     def choose_random(self):
