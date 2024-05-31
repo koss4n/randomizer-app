@@ -42,7 +42,7 @@ class App(ctk.CTk):
         
         #Button for adding new catagory
         self.catagories_add_button = ctk.CTkButton(self.sidebar_frame, text = "Add New Catagory",
-                                                   command=self.open_input_dialog_event_catagory)
+                                                   command=self.add_catagory_event)
         self.catagories_add_button.grid(row=4,column=0,padx=20,pady=(0,100))
         
         
@@ -70,7 +70,7 @@ class App(ctk.CTk):
         
         #Add item button
         self.add_button = ctk.CTkButton(self.side_scroll_frame, width=100, text = "Add Item", state='normal',
-                                                  command=self.open_input_dialog_event)
+                                                  command=self.add_option_event)
         self.add_button.grid(row=2,column=0,padx=10,pady=(40, 0))
         
         #Roll random item button
@@ -146,6 +146,7 @@ class App(ctk.CTk):
         #Resets options_delete & count
         self.options_delete = []
         self.options_delete_items_count = 0
+        self.delete_button.configure(state='disabled')
         
         #Rewrites catagory txt file without deleted options and resets frame
         current_catagory = self.catagories_optionmenu.get()
@@ -153,10 +154,12 @@ class App(ctk.CTk):
         self.change_options_event(current_catagory)
         
     #Add item to catagory
-    def open_input_dialog_event(self):
+    def add_option_event(self):
+        
         dialog = ctk.CTkInputDialog(text="Add Option to Catagory", title="Add Item")
-        current_catagory = self.catagories_optionmenu.get()
         item = dialog.get_input()
+       
+        current_catagory = self.catagories_optionmenu.get()
         
         #Raise error message
         if item in self.options:
@@ -164,12 +167,15 @@ class App(ctk.CTk):
             
         #Add item to catagory
         else:
-            FileInteractor.add_option_to_catagory(current_catagory,item)
-            self.change_options_event(current_catagory)
+            try:
+                FileInteractor.add_option_to_catagory(current_catagory,item)
+                self.change_options_event(current_catagory)
+            except TypeError:
+                pass
             
      
     #Add item to catagory
-    def open_input_dialog_event_catagory(self):
+    def add_catagory_event(self):
         dialog = ctk.CTkInputDialog(text="Write Catagory Name", title="Add Catagory")
         current_catagory = self.catagories_optionmenu.get()
         item = dialog.get_input()
