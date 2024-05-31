@@ -32,21 +32,21 @@ class FileInteractor():
     #Adds option to catagory    
     @staticmethod
     def add_option_to_catagory(catagory, option):
-        with open(directory+catagory+".txt", "a+") as editor:
-            firstline = editor.readline()
-            if firstline == "":
-                editor.write(option)
-            else:
-                editor.write("\n" + option)
+        option_list = FileInteractor.options_list(catagory)
+        option_list.append(option)
+        length_list = len(option_list)
+        with open(directory+catagory+".txt", "w+") as editor:
+            for i in range(length_list):
+                editor.write(option_list[i]+"\n")
         #Adds the @option to the @catagory txt file
             
     #Deletes items in a catagory from a given list
     def delete_options(catagory:str, options:list):
-       with open(directory+catagory+".txt", "w") as editor:
-        editor.write(options[0])
-        options.remove(options[0])
-        for i in options:
-            editor.write("\n" + i)
+       length_list = len(options)
+       with open(directory+catagory+".txt", "w+") as editor:
+        
+        for i in range(length_list):
+            editor.write(options[i]+"\n")
         editor.close() 
         
    
