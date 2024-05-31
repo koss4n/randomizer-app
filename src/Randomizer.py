@@ -40,6 +40,11 @@ class App(ctk.CTk):
                                                        command = self.change_options_event)
         self.catagories_optionmenu.grid(row=3,column=0,padx=20,pady=(10,10))
         
+        #Button for adding new catagory
+        self.catagories_add_button = ctk.CTkButton(self.sidebar_frame, text = "Add New Catagory",
+                                                   command=self.open_input_dialog_event_catagory)
+        self.catagories_add_button.grid(row=4,column=0,padx=20,pady=(0,100))
+        
         
         #Button for changing app appearance
         self.appearance_mode_label = ctk.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
@@ -73,11 +78,14 @@ class App(ctk.CTk):
                                                   command=self.choose_random)
         self.roll_button.grid(row=1,column=0,padx=10,pady=(20, 0))
         
+        
+        #WIP Testing design
         self.widgets_list.append(self.add_button)
         self.widgets_list.append(self.roll_button)
         self.widgets_list.append(self.delete_button)
         self.widgets_list.append(self.appearance_mode_optionemenu)
         self.widgets_list.append(self.catagories_optionmenu)
+        self.widgets_list.append(self.catagories_add_button)
         
     #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
@@ -127,10 +135,7 @@ class App(ctk.CTk):
            index += 1
         
         
-        
-    
-        
-        
+         
     #Removes checked items
     def delete_items_in_catagory_event(self):
         
@@ -161,6 +166,23 @@ class App(ctk.CTk):
         else:
             FileInteractor.add_option_to_catagory(current_catagory,item)
             self.change_options_event(current_catagory)
+            
+     
+    #Add item to catagory
+    def open_input_dialog_event_catagory(self):
+        dialog = ctk.CTkInputDialog(text="Write Catagory Name", title="Add Catagory")
+        current_catagory = self.catagories_optionmenu.get()
+        item = dialog.get_input()
+        
+        #Raise error message
+        if item in catagories_list:
+            CTkMessagebox(master = self, title="Error", message="Catagory already exists", icon='cancel', option_1="OK", justify="center").tkraise()
+            
+        #Add item to catagory
+        else:
+            FileInteractor.add_catagory(item)
+            catagories_list.append(item)
+            self.catagories_optionmenu.configure(values=catagories_list)
         
     def choose_random(self):
         #Choose random item from list
