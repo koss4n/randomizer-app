@@ -174,19 +174,27 @@ class App(ctk.CTk):
         current_catagory = self.catagories_optionmenu.get()
         item = dialog.get_input()
         
+       
+        
         #Raise error message
         if item in catagories_list:
             CTkMessagebox(master = self, title="Error", message="Catagory already exists", icon='cancel', option_1="OK", justify="center").tkraise()
-            
-        #Add item to catagory
+        #Error if input string is empty
+        elif item == "":
+            CTkMessagebox(master = self, title="Error", message="Name can't be empty", icon='cancel', option_1="OK", justify="center").tkraise()    
+        #If no error, add item to catagory
         else:
-            FileInteractor.add_catagory(item)
-            catagories_list.append(item)
-            self.catagories_optionmenu.configure(values=catagories_list)
-        
+            #Passes TypeError exception if user closes window
+            try:
+                FileInteractor.add_catagory(item)
+                catagories_list.append(item)
+                self.catagories_optionmenu.configure(values=catagories_list)
+            except TypeError:
+                pass
+            
     def choose_random(self):
         #Choose random item from list
-        random_option = random.choice(self.options)
+        
         #Func to present option & get response
         def message_popup(choosen_item):
             msg = CTkMessagebox(master = self, title="Option Rolled", message=choosen_item, icon='check', option_1="OK",option_2="Re-roll", justify="center")
@@ -199,7 +207,13 @@ class App(ctk.CTk):
                 temp.append(choosen_item)
                 message_popup(random_temp)
         
-        message_popup(random_option)
+        #Passes if there are no options.
+        try:
+            random_option = random.choice(self.options)
+            message_popup(random_option)
+        except IndexError:
+            pass
+       
             
     
             
