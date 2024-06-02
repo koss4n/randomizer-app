@@ -7,11 +7,11 @@ import random
 ctk.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
-catagories_list = FileInteractor.current_catagories()
+categories_list = FileInteractor.current_categories()
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
-        #All available options in current catagory
+        #All available options in current category
         self.options = []
         #vars for keeping track on checkbox items to manipulate
         self.options_delete = []
@@ -32,24 +32,24 @@ class App(ctk.CTk):
         self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Randomizer App", font=ctk.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        #Button for choosing catagory with options
-        self.catagories_optionmenu_label = ctk.CTkLabel(self.sidebar_frame, text="Catagories", anchor="w")
-        self.catagories_optionmenu_label.grid(row=2,column=0,padx=20,pady=(10,0))
+        #Button for choosing category with options
+        self.categories_optionmenu_label = ctk.CTkLabel(self.sidebar_frame, text="Categories", anchor="w")
+        self.categories_optionmenu_label.grid(row=2,column=0,padx=20,pady=(10,0))
         
-        self.catagories_optionmenu = ctk.CTkOptionMenu(self.sidebar_frame, values = catagories_list,
+        self.categories_optionmenu = ctk.CTkOptionMenu(self.sidebar_frame, values = categories_list,
                                                        command = self.change_options_event)
-        self.catagories_optionmenu.grid(row=3,column=0,padx=20,pady=(10,10))
-        self.catagories_optionmenu.set("")
+        self.categories_optionmenu.grid(row=3,column=0,padx=20,pady=(10,10))
+        self.categories_optionmenu.set("")
         
-        #Button for adding new catagory
-        self.catagories_add_button = ctk.CTkButton(self.sidebar_frame, text = "Add New Catagory",
-                                                   command=self.add_catagory_event)
-        self.catagories_add_button.grid(row=4,column=0,padx=20,pady=(0,100))
+        #Button for adding new category
+        self.categories_add_button = ctk.CTkButton(self.sidebar_frame, text = "Add New Category",
+                                                   command=self.add_category_event)
+        self.categories_add_button.grid(row=4,column=0,padx=20,pady=(0,100))
         
-         #Button for deleting catagory
-        self.catagories_del_button = ctk.CTkButton(self.sidebar_frame, text = "Delete Catagory",
-                                                   command=self.delete_catagory_event)
-        self.catagories_del_button.grid(row=4,column=0,padx=20,pady=(0,20))
+         #Button for deleting category
+        self.categories_del_button = ctk.CTkButton(self.sidebar_frame, text = "Delete Category",
+                                                   command=self.delete_category_event)
+        self.categories_del_button.grid(row=4,column=0,padx=20,pady=(0,20))
         
         
         #Button for changing app appearance
@@ -60,7 +60,7 @@ class App(ctk.CTk):
         self.appearance_mode_optionemenu.grid(row=6, column=0, padx=20, pady=(10, 10))
         
         
-        #Scrollable frame with options in choosen catagory
+        #Scrollable frame with options in choosen category
         self.scrollable_frame = ctk.CTkScrollableFrame(self, label_text="Options")
         self.scrollable_frame.grid(row=0,column=1,padx=(20, 0),pady=(20,0), sticky="wns")
         self.scrollable_frame.grid_columnconfigure(0, weight=1)
@@ -71,7 +71,7 @@ class App(ctk.CTk):
        
         #Delete item button
         self.delete_button = ctk.CTkButton(self.side_scroll_frame, width=100, text = "Delete Item", state='disabled',
-                                                  command = self.delete_items_in_catagory_event)
+                                                  command = self.delete_items_in_category_event)
         self.delete_button.grid(row=3,column=0,padx=10,pady=(10, 0))
         
         #Add item button
@@ -90,9 +90,9 @@ class App(ctk.CTk):
         self.widgets_list.append(self.roll_button)
         self.widgets_list.append(self.delete_button)
         self.widgets_list.append(self.appearance_mode_optionemenu)
-        self.widgets_list.append(self.catagories_optionmenu)
-        self.widgets_list.append(self.catagories_add_button)
-        self.widgets_list.append(self.catagories_del_button)
+        self.widgets_list.append(self.categories_optionmenu)
+        self.widgets_list.append(self.categories_add_button)
+        self.widgets_list.append(self.categories_del_button)
         
     #Changes apperance of app
     def change_appearance_mode_event(self, new_appearance_mode: str):
@@ -104,14 +104,14 @@ class App(ctk.CTk):
             for widget in self.widgets_list:
              widget.configure(fg_color="#D8BFD8", text_color="white") 
     
-    #Updates scrollbar_frame with options in catagory
-    def change_options_event(self, new_catagory: str):
+    #Updates scrollbar_frame with options in category
+    def change_options_event(self, new_category: str):
         
         self.add_button.configure(state='normal')
         for widgets in self.scrollable_frame.winfo_children():
             widgets.destroy()
             
-        self.options = FileInteractor.options_list(new_catagory)
+        self.options = FileInteractor.options_list(new_category)
         index = 0
            
         for i in self.options:
@@ -145,7 +145,7 @@ class App(ctk.CTk):
         
          
     #Removes checked items
-    def delete_items_in_catagory_event(self):
+    def delete_items_in_category_event(self):
         
         #Removes items in options_delete from options 
         for i in self.options_delete:
@@ -156,69 +156,69 @@ class App(ctk.CTk):
         self.options_delete_items_count = 0
         self.delete_button.configure(state='disabled')
         
-        #Rewrites catagory txt file without deleted options and resets frame
-        current_catagory = self.catagories_optionmenu.get()
-        FileInteractor.delete_options(current_catagory, self.options)
-        self.change_options_event(current_catagory)
+        #Rewrites category txt file without deleted options and resets frame
+        current_category = self.categories_optionmenu.get()
+        FileInteractor.delete_options(current_category, self.options)
+        self.change_options_event(current_category)
         
-    #Add item to catagory
+    #Add item to category
     def add_option_event(self):
         
-        dialog = ctk.CTkInputDialog(text="Add Option to Catagory", title="Add Item")
+        dialog = ctk.CTkInputDialog(text="Add Option to Category", title="Add Item")
         item = dialog.get_input()
        
-        current_catagory = self.catagories_optionmenu.get()
+        current_category = self.categories_optionmenu.get()
         
         #Raise error message
         if item in self.options:
-            CTkMessagebox(master = self, title="Error", message="Item already exists in catagory", icon='cancel', option_1="OK", justify="center").tkraise()
+            CTkMessagebox(master = self, title="Error", message="Item already exists in category", icon='cancel', option_1="OK", justify="center").tkraise()
             
-        #Add item to catagory
+        #Add item to category
         else:
             try:
-                FileInteractor.add_option_to_catagory(current_catagory,item)
-                self.change_options_event(current_catagory)
+                FileInteractor.add_option_to_category(current_category,item)
+                self.change_options_event(current_category)
             except TypeError:
                 pass
             
      
-    #Add item to catagory
-    def add_catagory_event(self):
-        dialog = ctk.CTkInputDialog(text="Write Catagory Name", title="Add Catagory")
-        current_catagory = self.catagories_optionmenu.get()
+    #Add item to category
+    def add_category_event(self):
+        dialog = ctk.CTkInputDialog(text="Write Category Name", title="Add Category")
+        current_category = self.categories_optionmenu.get()
         item = dialog.get_input()
         
        
         
         #Raise error message
-        if item in catagories_list:
-            CTkMessagebox(master = self, title="Error", message="Catagory already exists", icon='cancel', option_1="OK", justify="center").tkraise()
+        if item in categories_list:
+            CTkMessagebox(master = self, title="Error", message="Category already exists", icon='cancel', option_1="OK", justify="center").tkraise()
         #Error if input string is empty
         elif item == "":
             CTkMessagebox(master = self, title="Error", message="Name can't be empty", icon='cancel', option_1="OK", justify="center").tkraise()    
-        #If no error, add item to catagory
+        #If no error, add item to category
         else:
             #Passes TypeError exception if user closes window
             try:
-                FileInteractor.add_catagory(item)
-                catagories_list.append(item)
-                self.catagories_optionmenu.configure(values=catagories_list)
+                FileInteractor.add_category(item)
+                categories_list.append(item)
+                self.categories_optionmenu.configure(values=categories_list)
             except TypeError:
                 pass
-    def delete_catagory_event(self):
-        del_catagory = self.catagories_optionmenu.get()
+    def delete_category_event(self):
+        del_category = self.categories_optionmenu.get()
         
-        confirmation_box = CTkMessagebox(master = self, title="Delete catagory", message="Are you sure you want to delete "+del_catagory + "?", icon='question', option_1="YES", option_2="NO",
+        confirmation_box = CTkMessagebox(master = self, title="Delete category", message="Are you sure you want to delete "+del_category + "?", icon='question', option_1="YES", option_2="NO",
                                          justify="center", option_focus=2)
         confirmation_box.tkraise()
         user_answer = confirmation_box.get() 
         
         if user_answer == "YES":
             self.add_button.configure(state='disabled')
-            FileInteractor.delete_catagory(del_catagory)
-            catagories_list.remove(del_catagory)
-            self.catagories_optionmenu.configure(values=catagories_list)
-            self.catagories_optionmenu.set("")
+            FileInteractor.delete_category(del_category)
+            categories_list.remove(del_category)
+            self.categories_optionmenu.configure(values=categories_list)
+            self.categories_optionmenu.set("")
             for widgets in self.scrollable_frame.winfo_children():
                 widgets.destroy()
         
