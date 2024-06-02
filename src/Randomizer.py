@@ -47,7 +47,7 @@ class App(ctk.CTk):
         self.categories_add_button.grid(row=4,column=0,padx=20,pady=(0,100))
         
          #Button for deleting category
-        self.categories_del_button = ctk.CTkButton(self.sidebar_frame, text = "Delete Category",
+        self.categories_del_button = ctk.CTkButton(self.sidebar_frame, text = "Delete Category", state = 'disabled',
                                                    command=self.delete_category_event)
         self.categories_del_button.grid(row=4,column=0,padx=20,pady=(0,20))
         
@@ -108,6 +108,7 @@ class App(ctk.CTk):
     def change_options_event(self, new_category: str):
         
         self.add_button.configure(state='normal')
+        self.categories_del_button.configure(state='normal')
         for widgets in self.scrollable_frame.winfo_children():
             widgets.destroy()
             
@@ -205,6 +206,8 @@ class App(ctk.CTk):
                 self.categories_optionmenu.configure(values=categories_list)
             except TypeError:
                 pass
+            
+    #Function for deleting category, removes data from txt files and resets states of buttons affected by category
     def delete_category_event(self):
         del_category = self.categories_optionmenu.get()
         
@@ -215,6 +218,7 @@ class App(ctk.CTk):
         
         if user_answer == "YES":
             self.add_button.configure(state='disabled')
+            self.categories_del_button.configure(state='disabled')
             FileInteractor.delete_category(del_category)
             categories_list.remove(del_category)
             self.categories_optionmenu.configure(values=categories_list)
