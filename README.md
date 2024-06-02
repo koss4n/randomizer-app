@@ -10,3 +10,6 @@ Features:
 Data for categories is saved with txt files. 
 To launch the app, simply open the Randomizer.py file in src
 
+## Preview 
+
+![image](https://github.com/koss4n/randomizer-app/assets/170325808/70297d09-d7c6-433a-8546-a1ee2343ee53)
