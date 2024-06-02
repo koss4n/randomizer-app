@@ -8,43 +8,43 @@ class FileInteractor():
 
         
         
-    #Returns all of the existing catagories file names as a List
-    def current_catagories():
-        with open(directory+"Catagories.txt", "r") as editor:
+    #Returns all of the existing categories file names as a List
+    def current_categories():
+        with open(directory+"Categories.txt", "r") as editor:
             #Reads every line, and removes \n
-            catagories = editor.read().splitlines()
+            categories = editor.read().splitlines()
         editor.close()    
-        return catagories
+        return categories
         
             
             
-    #Creates a new catagory      
-    def add_catagory(catagory):
-        #Adds a new catagory name to the Catagories.txt file
-        with open(directory + "Catagories.txt", "a") as editor:
-            editor.write( catagory+"\n")
+    #Creates a new category      
+    def add_category(category):
+        #Adds a new category name to the Categories.txt file
+        with open(directory + "Categories.txt", "a") as editor:
+            editor.write( category+"\n")
             editor.close()
-        #Creates a new txt file with param @catagory name 
-        with open(directory+catagory+".txt", "a") as editor:
+        #Creates a new txt file with param @category name 
+        with open(directory+category+".txt", "a") as editor:
             editor.close()
          
       
             
-    #Adds option to catagory    
+    #Adds option to category    
     @staticmethod
-    def add_option_to_catagory(catagory, option):
-        option_list = FileInteractor.options_list(catagory)
+    def add_option_to_category(category, option):
+        option_list = FileInteractor.options_list(category)
         option_list.append(option)
         length_list = len(option_list)
-        with open(directory+catagory+".txt", "w+") as editor:
+        with open(directory+category+".txt", "w+") as editor:
             for i in range(length_list):
                 editor.write(option_list[i]+"\n")
-        #Adds the @option to the @catagory txt file
+        #Adds the @option to the @category txt file
             
-    #Deletes items in a catagory from a given list
-    def delete_options(catagory:str, options:list):
+    #Deletes items in a category from a given list
+    def delete_options(category:str, options:list):
        length_list = len(options)
-       with open(directory+catagory+".txt", "w+") as editor:
+       with open(directory+category+".txt", "w+") as editor:
         
         for i in range(length_list):
             editor.write(options[i]+"\n")
@@ -52,33 +52,33 @@ class FileInteractor():
         
    
     
-    def options_list(userCatagory):
+    def options_list(user_category):
         #fix new line issue
-        #userCatagory = userCatagory.replace("\n", "")
-        with open(directory + userCatagory+".txt", "r") as editor:
+        #user_category = user_category.replace("\n", "")
+        with open(directory + user_category+".txt", "r") as editor:
             listOfOptions: list[str] = editor.read().splitlines()
         return listOfOptions
         
        
-        #Select random option in a catagory
-    def select_random_option(catagory):
-        listOfOptions = FileInteractor.options_list(catagory)
+        #Select random option in a category
+    def select_random_option(category):
+        listOfOptions = FileInteractor.options_list(category)
         listLength: int = len(listOfOptions)
         randomNumber = random.randint(0,listLength)
         return listOfOptions[randomNumber]
         
         
                 
-     #Delete catagory file & entry
-    def delete_catagory(catagory):
-        file = directory+catagory+".txt"
+     #Delete category file & entry
+    def delete_category(category):
+        file = directory+category+".txt"
         if os.path.exists(file):
             os.remove(file)
-            catagories = FileInteractor.current_catagories()
-            catagories.remove(catagory)
-            with open(directory + "Catagories"+".txt", "w+") as editor:
-                for i in range(len(catagories)):
-                    editor.write(catagories[i]+"\n")
+            categories = FileInteractor.current_categories()
+            categories.remove(category)
+            with open(directory + "Categories"+".txt", "w+") as editor:
+                for i in range(len(categories)):
+                    editor.write(categories[i]+"\n")
                 editor.close()
                 
                 
